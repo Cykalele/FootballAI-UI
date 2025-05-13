@@ -22,6 +22,7 @@ upload_method = st.radio("Wie möchtest du dein Video bereitstellen?", ["Upload"
 
 video_file = None
 cloud_link = None
+API_BASE = "https://1910-2a00-1e-d383-4201-818a-61d-c40a-a808.ngrok-free.app"  # <- NGROK API URL
 
 if upload_method == "Upload":
     video_file = st.file_uploader("🎞️ MP4-Datei hochladen", type=["mp4"])
@@ -56,7 +57,7 @@ if video_file or cloud_link:
             if cloud_link:
                 payload["video_url"] = cloud_link
                 try:
-                    r = requests.post("https://your-backend.com/process-link", json=payload)
+                    r = requests.post(f"{API_BASE}/process-link", json=payload)
                     if r.status_code == 200:
                         st.success("🚀 Verarbeitung erfolgreich gestartet (Cloud-Link).")
                     else:
@@ -69,7 +70,7 @@ if video_file or cloud_link:
                     files = {
                         "file": (video_file.name, video_file, "video/mp4")
                     }
-                    r = requests.post("https://your-backend.com/upload", files=files, data=payload)
+                    r = requests.post(f"{API_BASE}/upload", files=files, data=payload)
                     if r.status_code == 200:
                         st.success("🚀 Verarbeitung erfolgreich gestartet (Upload).")
                     else:
